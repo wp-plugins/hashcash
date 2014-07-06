@@ -3,7 +3,7 @@ Contributors: pkaroukin
 Tags: hashcash, spam, security
 Requires at least: 3.0.0
 Tested up to: 3.9.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -13,7 +13,17 @@ Integrates Hashcash.IO proof-of-work widget with login/registration/comment form
 
 This plugin will integrate jQuery plugin Hashcash.IO (https://github.com/hashcash/jquery.hashcash.io) to be used in combination with https://hashcash.io/ service.
 
-Main development happens in https://github.com/hashcash/wordpress-hashcash . Please use it to contribute and file tickets with issues or feature requests.
+Active development happens in GitHub repository - https://github.com/hashcash/wordpress-hashcash
+
+Please report all issues at https://github.com/hashcash/wordpress-hashcash/issues
+
+Because of the way plugins work, problem might arrise from specific combination of WP version, plugins, themes.
+Therefore for the best result everytime you submit a bug report or just seeking an advice please include following:
+
+* Version of Wordpress you are using
+* Brand and version of Browser you are using to test it
+* List of third-party plugins and their versions activated on your website
+* What theme and version you are using
 
 ### Protect Against Web Spam
 
@@ -57,10 +67,9 @@ which updates blind user via screen reader about progress.
 
 == Installation ==
 
-1. Obtain keys pair at https://hashcash.io/
-2. Download plugin folder into /wp-content/plugins/ on your server
-3. Activate the plugin through the 'Plugins' menu in WordPress
-4. On Hashcash plugin settings page set public and private keys obtained in first step
+1. Download plugin folder into /wp-content/plugins/ on your server
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. On Hashcash plugin settings page generate new keys and save settings
 
 == Screenshots ==
 
