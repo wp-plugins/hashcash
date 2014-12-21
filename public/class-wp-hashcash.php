@@ -224,6 +224,26 @@ class WP_Hashcash {
 	    return $approved;
 	}
 
+	private function mailError($message) {
+		$mailed_last = get_option('hashcash_mailed_last');
+
+		// Don't sent email more often than once every 10 minutes to not annoy site administrator
+		if ($mailed_last && $mailed_last + 600 > time()) {
+			return;
+		}
+		//update_option('hashcash_mailed_last', time());
+
+		$to = get_option( 'admin_email' );
+		$subject = '[' . get_option( 'blogname' ) . '] Hashcash.IO plugin error.';
+
+		// Add debugging info
+		$message.= "Details:\n\n";
+		$message.= print_r($_REQUEST,1) . "\n\n";
+		$message.= print_r($_SERVER,1) . "\n\n";
+
+		wp_mail($to, $subject, $message);
+	}
+
 	/**
 	 * Verify hash and secret key at the Hashcash.io server
 	 * 
@@ -253,6 +273,27 @@ class WP_Hashcash {
 	    $url = 'https://hashcash.io/api/checkwork/' . $hash . '?apikey=' . $key;
 
 	    $jsonWork = wp_remote_get( $url );
+
+		if ( is_wp_error( $jsonWork ) ) {
+			$error_message = $jsonWork->get_error_message();
+
+			$message = "While processing form submission Hashcash.IO plugin experienced connectivity error. Therefore allowed submission to pass.\n\n";
+			$message.= 'Error message: ' . $error_message . "\n\n";
+
+			$this->mailError($message);
+
+			return 'ok';
+		}
+
+		// Incorrect keys
+		if ( $jsonWork['response'] && $jsonWork['response']['code'] == 403 ) {
+			$message = "Hashcash.IO keys were not accepted and user was allowed to submit form without verification.\n\n";
+			$message.= "Please login to Admin Dashboard and update settings of Hashcash.IO plugin with correct keys.\n\n";
+
+			$this->mailError($message);
+
+			return 'ok';
+		}
 
 	    $work = json_decode( wp_remote_retrieve_body( $jsonWork ) );
 
